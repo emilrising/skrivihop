@@ -1,20 +1,21 @@
 <?php
 include "i/head.php";
-
 include "i/header.php";
+require_once "classes/character.php";
 
-$sql = "SELECT * FROM `characters` WHERE `id` = '".$_GET['id']."'";
-$res = mysql_query($sql);
-$char = mysql_fetch_assoc($res);
+$character = Character::build_object($_GET['id']);
+
+if ($character)
+{
 ?>
 <img src="images/logosmallbeta.png" class="toplogo"> 
 
 
 <br style="clear: both;">
 
-<h2><?=$char['name']?></h2>
+<h2><?=$character->name?></h2>
 	    <p>
-	    	<?=$char['longdesc']?>
+	    	<?=$character->longdesc?>
 	    </p>
 		<div class="box info">
 
@@ -22,7 +23,7 @@ $char = mysql_fetch_assoc($res);
 				<!-- -->
 			</div>
 
-	    Skapad av <a href="player.php?id=<?=$char['createdby']?>"><?=get_user_name($char['createdby'])?></a>, <?=$char['createddate']?><br>
+	    Skapad av <?= $character->creator()->url() ?>, <?=$character->createddate?><br>
 <?php
 /* todo:
 	    	    <ul><h4>Aktiv i krönikor</h4>
@@ -49,6 +50,18 @@ $char = mysql_fetch_assoc($res);
 <?php
 if($char['createdby'] == $_SESSION['userid'])
 edit_char($_GET['id']);
+
+} 
+else 
+{
+		?>
+			<h4>Det är väldigt sorgligt</h4>
+				<p>
+					Men vi kunde inte hitta den karaktär du letar efter.
+				</p>
+			<?php
+	}
+
 
 include "i/footer.php";
 

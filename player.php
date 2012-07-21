@@ -1,27 +1,24 @@
 <?php
 
 include "i/head.php";
-
 include "i/header.php";
 
+require_once("classes/user.php");
 
+$user = User::build_object($_GET['id']);
 
-$sql = "SELECT * FROM users WHERE id='".$_GET['id']."'";
-$res = mysql_query($sql);
-$user = mysql_fetch_assoc($res);
+if ($user)
+{
 ?>
+
 <img src="images/logosmallbeta.png" class="toplogo"> 
 
 <br style="clear: both;">
 
-<h2><?=$user[name]?><img src="<?=(strlen($user[avatar]) > 2 ? $user[avatar] : "images/johndoe.png")?>" class="avatar big"></h2>
+<h2><?=$user->name?><img src="<?=(strlen($user->avatar) > 2 ? $user->avatar : "images/johndoe.png")?>" class="avatar big"></h2>
 
 	    <p>
-	    	<?php
-	    	$user['description'] = preg_replace("/(http:\/|(www\.))(([^\s<]{4,68})[^\s<]*)/","<a href='http://$2$3' target='_blank'>$1$2$4</a>",$user['description']);
-	    	$user['description'] = preg_replace("/(\s@)(([^\s<]{4,68})[^\s<]*)/","<a href='https://twitter.com/#!/$2' target='_blank'>$1$2$4</a>",$user['description']);
-	    	echo $user['description'];
-	    	?>
+	    	<?= $user->formatted_description() ?>
 	    	
 		</p>	
 		<p>	
@@ -31,18 +28,35 @@ edit_player($_GET['id']);
 ?>
 </p>
 <?php
+
 if(isset($changed_your_pwd)){
 	echo $changed_your_pwd;
 }
 
+$latest = $user->latestpost();
 ?>
-	<?=latest_post('user:'.$_GET['id'])?>
+	<div class="box">
+		<div class="arrowup">
+			<!-- -->
+		</div>
+		
+		<h2>Senaste inlägg</h2>
+		
+		<p>"<i><?=$latest->body?></i>"</p>
+				
+				<p class="byuser">
+					Från krönikan <?= $latest->chronicle()->url() ?>
+				</p>
+			
+				<br style="clear:both;">
+			
+				</div>
 
 <div class="box info">
 			<div class="arrowup">
 				<!-- -->
 			</div>
-Syntes senast: <?=$user[lastlogin]?>
+Syntes senast: <?= $user->lastlogin ?>
 <?php
 if($_SESSION['userid'] == $_GET['id']){
 	$sql = "SELECT `chronicleid` FROM `post` WHERE `createdby` = '".$_SESSION['userid']."' GROUP BY `chronicleid`";
@@ -85,30 +99,27 @@ if($_SESSION['userid'] == $_GET['id']){
 				<!-- -->
 			</div>	 
 
-	    	    <ul><h4><?=$user[name]?>s karaktärer</h4>
+	    	    <ul><h4>Karaktärer</h4>
 	    	    	<?php
-	    	    	$sql = "SELECT `name`, `id` FROM `characters` WHERE `createdby` = '".$_GET['id']."'";
-					$res = mysql_query($sql);
-					while($rad = mysql_fetch_assoc($res)){
+	    	    	
+	    	    	foreach ($user->characters() as $character)
+					{
 						?>
-						<li><a href="character.php?id=<?=$rad['id']?>"><?=$rad['name']?></a></li>
+						<li><?= $character->url() ?></li>
 						<?
 					}
-	    	    	
-	    	    	
+					
 	    	    	?>
-
 	    	     </ul>
-	    	    <ul><h4><?=$user[name]?>s krönikor</h4>
+	    	    <ul><h4>Krönikor</h4>
 	    	    	<?php
-	    	    	$sql = "SELECT `name`, `id` FROM `chronicles` WHERE `createdby` = '".$_GET['id']."'";
-					$res = mysql_query($sql);
-					while($rad = mysql_fetch_assoc($res)){
+
+	    	    	foreach ($user->chronicles() as $chronicle)
+					{
 						?>
-						<li><a href="chronicle.php?id=<?=$rad['id']?>"><?=$rad['name']?></a></li>
+						<li><?= $chronicle->url() ?></li>
 						<?
 					}
-	    	    	
 	    	    	
 	    	    	?>
 
@@ -123,14 +134,15 @@ do_new_stuff();
 </div>
 <br style="clear: both;">
 
-
-
-
 <br>
 <?php
 
-
+}
+else {
+	?>
+	<h4>Det är väldigt sorgligt</h4>
+	<p>Men vi kunde inte hitta den här författaren.</p> <?		
+}
 include "i/footer.php";
-
 include "i/foot.php";
 ?>

@@ -1,0 +1,65 @@
+<?
+
+require_once "classes/post.php";
+require_once "classes/character.php";
+
+class User
+{
+	public $id;
+	public $name;
+	public $lastlogin;
+	public $avatar;
+	public $description;
+	
+	public function url()
+	{
+		return "<a href=\"player.php?id=$this->id\">$this->name</a>";
+	}
+	
+	public function formatted_description()
+	{
+		$formatted_description = preg_replace("/(http:\/|(www\.))(([^\s<]{4,68})[^\s<]*)/","<a href='http://$2$3' target='_blank'>$1$2$4</a>",$this->description);
+	    $formatted_description = preg_replace("/(\s@)(([^\s<]{4,68})[^\s<]*)/","<a href='https://twitter.com/#!/$2' target='_blank'>$1$2$4</a>",$formatted_description);
+	    return $formatted_description;
+	}
+	
+	public function latestpost()
+	{
+		global $pdo;
+		
+		$stmt = $pdo->prepare("SELECT * FROM `post` WHERE post.Active = 'yes' AND `CreatedBy` = :Id ORDER BY `CreatedDate` DESC LIMIT 1");
+		$stmt->execute(array(':Id' => $this->id));
+		$stmt->setFetchMode(PDO::FETCH_CLASS, Post);
+		return $stmt->fetch();
+	}
+	
+	public function characters()
+	{
+		global $pdo;
+		
+		$stmt = $pdo->prepare("SELECT * FROM `characters` WHERE `createdby` = :id");
+		$stmt->execute(array(':id' => $this->id));
+		return $stmt->fetchAll(PDO::FETCH_CLASS, Character);	
+	}
+	
+	public function chronicles()
+	{
+		global $pdo;
+		
+		$stmt = $pdo->prepare("SELECT * FROM `chronicles` WHERE `createdby` = :id");
+		$stmt->execute(array(':id' => $this->id));
+		return $stmt->fetchAll(PDO::FETCH_CLASS, Chronicle);
+	}
+	
+	public static function build_object($id)
+	{
+		global $pdo;
+		
+		$stmt = $pdo->prepare("SELECT * FROM `users` WHERE id = :id");
+		$stmt->execute(array(':id' => $id));
+		$stmt->setFetchMode(PDO::FETCH_CLASS, User);
+		return $stmt->fetch();
+	}
+}
+
+?>

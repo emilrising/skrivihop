@@ -1,7 +1,7 @@
 <?php
 include "i/head.php";
-
 include "i/header.php";
+require_once "classes/character.php";
 
 	if($_GET['shownr']){
 		$shownr = $_GET['shownr'];
@@ -35,7 +35,7 @@ include "i/header.php";
 <br style="clear: both;">
 <?php
 	if($_GET['search']){
-		$where = "AND `name` LIKE '%".mysql_real_escape_string($_GET['search'])."%'";
+		$where = "AND `name` LIKE :Name";
 	}
 
 	if($_GET[orderby] == 'latest'){
@@ -47,20 +47,30 @@ include "i/header.php";
 	else
 		$orderby = "`createddate` DESC";
 	
-	$sql = "SELECT * FROM `characters` WHERE active = 'yes' ".$where." ORDER BY ".$orderby." LIMIT ".$limit."";
-	$res = mysql_query($sql);
-	$num = mysql_num_rows($res);
-	if($num > 0){
-		while($char = mysql_fetch_assoc($res)){
-	?>
-			<h4>
-			<a href="character.php?id=<?=$char['id']?>"><?=$char['name']?></a><br>
-			</h4>
+	$sql = "SELECT * FROM `characters` WHERE active = 'yes' ".$where." ORDER BY ".$orderby." LIMIT ".$limit."";	
+
+	$stmt = $pdo->prepare("SELECT COUNT(*) ".$where." FROM chronicles");
+	$stmt->bindParam(":Name", $_GET['search']);
+	$stmt->execute();
+	$num = $stmt->fetchColumn(0);
+	
+	if ($num > 0)
+	{
+		$stmt = $pdo->prepare($sql);
+	
+		// Depending on the input we might not actually need a parameter, so use bindParam and ignore return value.
+		$stmt->bindParam(":Name", $_GET['search']);
+		$stmt->execute();
+		$stmt->setFetchMode(PDO::FETCH_INTO, new Character);
+
+		foreach ($stmt as $character)
+		{ ?>
+			<h4><?= $character->url() ?></h4>
 			<div class="box info">
 	
 				<div class="arrowup">
 					<!-- -->
-				</div>Gestaltas av: <a href="player.php?id=<?=$char['createdby']?>"><?=get_user_name($char['createdby'])?></a>,<br> skapad: <?=$char['createddate']?>
+				</div>Gestaltas av: <?= $character->creator()->url()?>,<br> skapad: <?=$character->createddate?>
 			</div>	
 			
 	<?php
@@ -77,16 +87,10 @@ include "i/header.php";
 
 ?>
 
-
-	
-
 <br style="clear: both;">
 
 <div class="pagination">
 <?php
-	$sql2 = "SELECT * FROM `characters` WHERE active = 'yes'";
-	$res2 = mysql_query($sql2);
-	$num = mysql_num_rows($res2);
 
 	if($_GET['page'])
 		$current = $_GET['page'];
@@ -115,9 +119,6 @@ do_new_char();
 <br style="clear: both;">
 <?php
 
-
-
 include "i/footer.php";
-
 include "i/foot.php";
 ?>

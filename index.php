@@ -1,17 +1,12 @@
 <?php
 
 include "i/head.php";
-
-
-
 include "i/header.php";
 
+require_once "classes/post.php";
+require_once "classes/sitetext.php";
+
 ?>
-
-
-
-
-
 	<div class="biglogo">
 
 		<img src="images/logobigbeta.png" alt="Skrivihop.net - Skriv tillsammans!">
@@ -84,7 +79,23 @@ include "i/header.php";
 
 	</p>
 
-	<?=latest_post()?>
+	<? 
+	$post = Post::latest();
+	?>
+	
+	<div class="box">
+		<div class="arrowup">
+		</div>
+		<h2>Senaste inlägg</h2>
+		
+		<p>"<i><?= $post->body ?></i>"</p>
+					
+		<p class="byuser">
+			Av <?= $post->user()->url() ?>,<br>
+			från krönikan <?= $post->chronicle()->url() ?></a>
+		</p>
+		<br style="clear:both;">	
+	</div>
 
 	<p>
 
@@ -92,14 +103,15 @@ include "i/header.php";
 
 	</p>
 <?php
+
 $index_texts = array('historia','copyright','howdoesitwork','rules','cookies','beta');
 
 foreach($index_texts as $get_txt){
-	$sql_texts = "SELECT * FROM sitetexts WHERE name = '".$get_txt."'";
-	$res_texts = mysql_query($sql_texts);
-	$texts = mysql_fetch_assoc($res_texts);
+
+	$siteText = SiteText::getInstance($get_txt);
+
 ?>
-	<h2 class="heading"><?=$texts['heading']?>
+	<h2 class="heading"><?=$siteText->heading?>
 
 	<div class="dotlight">
 
@@ -108,24 +120,12 @@ foreach($index_texts as $get_txt){
 	</div></h2>
 
 	<div class="more">
-		<?=$texts['text']?>
-	
+		<?=$siteText->text?>
 	</div>
 <?php
 }
 
-?>
-
-
-
-
- <?php
-
 include "i/footer.php";
-
-
-
 include "i/foot.php";
 
 ?>
-

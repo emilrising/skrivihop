@@ -1,7 +1,8 @@
 <?php
 include "i/head.php";
-
 include "i/header.php";
+
+require_once "classes/user.php";
 
 	if($_GET['shownr']){
 		$shownr = $_GET['shownr'];
@@ -34,8 +35,9 @@ include "i/header.php";
 </div>
 <br style="clear: both;">
 <?php
+
 	if($_GET['search']){
-		$where = "AND `name` LIKE '%".mysql_real_escape_string($_GET['search'])."%'";
+		$where = "AND `name` LIKE :Name";
 	}
 
 	if($_GET[orderby] == 'latest'){
@@ -46,27 +48,38 @@ include "i/header.php";
 	}
 	else
 		$orderby = "`createddate` DESC";
-	$sql = "SELECT * FROM users WHERE active = 'yes' ".$where." ORDER BY ".$orderby." LIMIT ".$limit."";
-	$res = mysql_query($sql);
-	$num = mysql_num_rows($res);
-	if($num > 0){
-		while($writer = mysql_fetch_assoc($res)){
-			$latestpost = mysql_fetch_assoc(mysql_query("SELECT `createddate` FROM `post` WHERE createdby = '".$writer['id']."' ORDER BY createddate DESC LIMIT 1"));
-			?>
-			<h4>
-			<a href="player.php?id=<?=$writer['id']?>"><?=$writer['name']?></a><br>
-			</h4>
+
+	$stmt = $pdo->query("SELECT COUNT(*) FROM users WHERE active = 'yes'");
+	$num = $stmt->fetchColumn(0);
+
+	if ($num > 0)
+	{
+		$sql = "SELECT * FROM users WHERE active = 'yes' ".$where." ORDER BY ".$orderby." LIMIT ".$limit."";
+	
+		$stmt = $pdo->prepare($sql);
+	
+		// Depending on the input we might not actually need a parameter, so use bindParam and ignore return value.
+		$stmt->bindParam(":Name", $_GET['search']);
+		$stmt->execute();	
+		$stmt->setFetchMode(PDO::FETCH_INTO, new User);
+	
+		foreach ($stmt as $user)
+		{ ?>
+			<h4><?= $user->url() ?></h4>
 			<div class="box info">
 	
 				<div class="arrowup">
 					<!-- -->
-				</div>Syntes senast: <?=$writer['lastlogin']?>,<br> Senaste inlägg: <?=$latestpost['createddate']?>
+				</div>
+				Syntes senast: <?= $user->lastlogin ?><br>
+				Senaste inlägg: <?= $user->latestpost()->createddate ?>
 			</div>	
 			
 			<?php
 		}
 	}
-	else{
+	else
+	{
 			?>
 			<h4>Det är väldigt sorgligt</h4>
 				<p>
@@ -84,10 +97,6 @@ include "i/header.php";
 
 <div class="pagination">
 <?php
-	$sql2 = "SELECT * FROM users WHERE active = 'yes'";
-	$res2 = mysql_query($sql2);
-	$num = mysql_num_rows($res2);
-
 	if($_GET['page'])
 		$current = $_GET['page'];
 	else
