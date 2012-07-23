@@ -20,30 +20,18 @@ class Chronicle
 	public function total_posts()
 	{
 		global $pdo;
-		static $total_posts;
 		
-//		if (!$total_posts)
-//		{
-			$stmt = $pdo->prepare("SELECT COUNT(*) FROM `post` WHERE `chronicleid` = :id");
-			$stmt->execute(array('id' => $this->id));
-			$total_posts = $stmt->fetchColumn(0);
-//		}
-		
-		return $total_posts;
+		$stmt = $pdo->prepare("SELECT COUNT(*) FROM `post` WHERE `chronicleid` = :id");
+		$stmt->execute(array('id' => $this->id));
+		return $stmt->fetchColumn(0);
 	}
 	
 	public function total_comments() { 
 		global $pdo;
-		static $total_comments;
-		
-//		if (!$total_comments)
-//		{
-			$stmt = $pdo->prepare("SELECT COUNT(*) FROM `comments` WHERE `chronicleid` = :id");
-			$stmt->execute(array('id' => $this->id));
-			$total_comments = $stmt->fetchColumn(0);
-//		}
-		
-		return $total_comments;
+
+		$stmt = $pdo->prepare("SELECT COUNT(*) FROM `comments` WHERE `chronicleid` = :id");
+		$stmt->execute(array('id' => $this->id));
+		return $stmt->fetchColumn(0);
  	}
 
 	public function enumerateCategories()
@@ -59,7 +47,7 @@ class Chronicle
 	
 	public function creator()
 	{
-		return User::build_object($this->createdby);	
+		return User::getInstance($this->createdby);	
 	}
 	
 	public function last_post()
@@ -72,7 +60,7 @@ class Chronicle
 		return $stmt->fetch();
 	}
 	
-	public static function build_object($id)
+	public static function getInstance($id)
 	{
 		global $pdo;
 		

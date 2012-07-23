@@ -37,7 +37,7 @@ if($_SESSION['showwriter']){
 	<?
 }
 
-$chronicle = Chronicle::build_object($_GET['id']);
+$chronicle = Chronicle::getInstance($_GET['id']);
 
 if ($chronicle)
 {

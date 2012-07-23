@@ -33,28 +33,31 @@ class User
 		return $stmt->fetch();
 	}
 	
-	public function characters()
+	public function enumerateCharacters()
 	{
 		global $pdo;
 		
 		$stmt = $pdo->prepare("SELECT * FROM `characters` WHERE `createdby` = :id");
 		$stmt->execute(array(':id' => $this->id));
-		return $stmt->fetchAll(PDO::FETCH_CLASS, Character);	
+		$stmt->setFetchMode(PDO::FETCH_INTO, new Character);
+		
+		return $stmt;	
 	}
 	
-	public function chronicles()
+	public function enumerateChronicles()
 	{
 		global $pdo;
 		
 		$stmt = $pdo->prepare("SELECT * FROM `chronicles` WHERE `createdby` = :id");
 		$stmt->execute(array(':id' => $this->id));
-		return $stmt->fetchAll(PDO::FETCH_CLASS, Chronicle);
+		$stmt->setFetchMode(PDO::FETCH_INTO, new Chronicle);
+		return $stmt;
 	}
 	
-	public static function build_object($id)
+	public static function getInstance($id)
 	{
 		global $pdo;
-		
+
 		$stmt = $pdo->prepare("SELECT * FROM `users` WHERE id = :id");
 		$stmt->execute(array(':id' => $id));
 		$stmt->setFetchMode(PDO::FETCH_CLASS, User);

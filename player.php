@@ -5,7 +5,7 @@ include "i/header.php";
 
 require_once("classes/user.php");
 
-$user = User::build_object($_GET['id']);
+$user = User::getInstance($_GET['id']);
 
 if ($user)
 {
@@ -102,7 +102,7 @@ if($_SESSION['userid'] == $_GET['id']){
 	    	    <ul><h4>Karaktärer</h4>
 	    	    	<?php
 	    	    	
-	    	    	foreach ($user->characters() as $character)
+	    	    	foreach ($user->enumerateCharacters() as $character)
 					{
 						?>
 						<li><?= $character->url() ?></li>
@@ -114,7 +114,7 @@ if($_SESSION['userid'] == $_GET['id']){
 	    	    <ul><h4>Krönikor</h4>
 	    	    	<?php
 
-	    	    	foreach ($user->chronicles() as $chronicle)
+	    	    	foreach ($user->enumerateChronicles() as $chronicle)
 					{
 						?>
 						<li><?= $chronicle->url() ?></li>

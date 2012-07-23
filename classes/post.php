@@ -14,22 +14,12 @@ class Post
 	
 	public function user()
 	{
-		global $pdo;
-		
-		$stmt = $pdo->prepare("SELECT * FROM `users` WHERE id = :id");
-		$stmt->execute(array(':id' => (int) $this->createdby));
-		$stmt->setFetchMode(PDO::FETCH_CLASS, User);
-		return $stmt->fetch();
+		return User::getInstance($this->createdby);
 	}
 	
 	public function chronicle()
 	{
-		global $pdo;
-		
-		$stmt = $pdo->prepare("SELECT * FROM `chronicles` WHERE id = :id");
-		$stmt->execute(array(':id' => $this->chronicleid));
-		$stmt->setFetchMode(PDO::FETCH_CLASS, Chronicle);
-		return $stmt->fetch();
+		return Chronicle::getInstance($this->chronicleid);
 	}
 	
 	public static function latest()

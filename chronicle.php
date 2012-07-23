@@ -7,7 +7,7 @@ require_once "classes/chronicle.php";
 
 <br style="clear: both;">
 <?
-	$chronicle = Chronicle::build_object($_GET['id']);
+	$chronicle = Chronicle::getInstance($_GET['id']);
 	
 	if ($chronicle)
 	{

@@ -17,10 +17,10 @@ class Character
 	
 	public function creator()
 	{
-		return User::build_object($this->createdby);
+		return User::getInstance($this->createdby);
 	}
 	
-	public static function build_object($id)
+	public static function getInstance($id)
 	{
 		global $pdo;
 		

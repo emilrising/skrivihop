@@ -3,7 +3,7 @@ include "i/head.php";
 include "i/header.php";
 require_once "classes/character.php";
 
-$character = Character::build_object($_GET['id']);
+$character = Character::getInstance($_GET['id']);
 
 if ($character)
 {
