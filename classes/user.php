@@ -1,5 +1,6 @@
 <?
 
+require_once "dbc.php";
 require_once "classes/post.php";
 require_once "classes/character.php";
 
@@ -60,6 +61,16 @@ class User
 
 		$stmt = $pdo->prepare("SELECT * FROM `users` WHERE id = :id");
 		$stmt->execute(array(':id' => $id));
+		$stmt->setFetchMode(PDO::FETCH_CLASS, User);
+		return $stmt->fetch();
+	}
+	
+	public static function fromOpenID($identityUrl)
+	{
+		global $pdo;
+
+		$stmt = $pdo->prepare("SELECT * FROM users JOIN openid_mapping ON users.id = userid WHERE url = :Url");
+		$stmt->execute(array(':Url' => $identityUrl));
 		$stmt->setFetchMode(PDO::FETCH_CLASS, User);
 		return $stmt->fetch();
 	}

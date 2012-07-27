@@ -1,11 +1,20 @@
 <?
 
 ?>
-
 		<div id="header">
 			<div id="top">
-				
-				<?=do_top_header()?>
+<?				
+			if($currentUser){
+?>
+				<div id="accountinfo">
+					<div class="dotlight">
+						<?=updates_since_last()?>
+					</div>
+					<?= $currentUser->url() ?>&nbsp;&nbsp-&nbsp;&nbsp;<a href="index.php?logout=true">Logga ut</a>
+				</div>
+<?
+			}
+?>
 
 			</div>
 			<div id="topmenu">

@@ -13,54 +13,23 @@ require_once "classes/sitetext.php";
 
 	</div>
 
-	<form class="box login" action="<?=(isset($create_new_user) ? "signup.php" : "login.php")?>" method="post">
-
+<? 
+if (!$currentUser)
+{
+?>
+    <form name="login" class="box login" action="" method="post">
 		<div class="arrowup">
-
 			<!-- -->
-
 		</div>
-
 		<h2> Bli medlem/ Logga in. </h2> 
-
-		<label for="username">Användarnamn</label>
-
-		<input type="email" name="username" <?=(isset($create_new_user) ? "value='".$create_new_user['username']."'" : "")?> placeholder="Användarnamn" required>
-
-		<br>
-
-		<label for="password">Lösenord</label>
-
-		<input type="password" name="password" <?=(isset($create_new_user) ? "value='".$create_new_user['password']."'" : "")?> placeholder="Lösenord" required>
-
-		<input type="submit" name="submit">
-
-		<?php
-
-		if($errorflag == TRUE){
-			if(isset($errormsg_arr)){
-				echo "<ul>";
-	
-				foreach($errormsg_arr as $error){
-	
-					echo "<li>".$error."</li>";
-	
-					
-	
-				}
-	
-				echo "</ul>";
-			}
-			elseif(isset($create_new_user)){
-				include "functions/createnewuser.php";
-			}
-
-		}
-
-		?>
-
+    	<p><a onclick="document.forms['login'].openid_identifier.value='https://www.google.com/accounts/o8/id'">Google-konto</a></p>
+    	<label for="openid_identifier">OpenID URL</label><input type="text" name="openid_identifier" />
+    	<input type="submit" name="submit" value="Logga in">
+    	<p><i><?= $errorMessage ?></i></p>
 	</form>
-
+<?php
+}
+?>
 	<h1>Skriv tillsammans!</h1>
 
 

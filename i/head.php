@@ -1,9 +1,6 @@
 <?php
 include "i/shead.php";
-
 include "functions/save_post.php";
-
-
 ?>
 <!DOCTYPE HTML>
 <html>
