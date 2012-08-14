@@ -2,20 +2,16 @@
 include "shead.php";
 include "show_info_in_chronicle.php";
 
+if($_GET['nocomments'])
+	$_SESSION['showcomments'] = FALSE;
 
-
-if($_GET['close'])
-exit();
-
-if($_GET['showcomments']){
+if($_GET['showcomments'])
+{
 	$data = explode('_',$_GET['showcomments']);
 	show_comments($data[1]);
-	//Let's remember ok?
-	if(!$_SESSION['showcomments'])
-		$_SESSION['showcomments'] = TRUE;
-	elseif($_SESSION['showcomments'] == TRUE)
-		unset($_SESSION['showcomments']);	
+	$_SESSION['showcomments'] = TRUE;
 }
+
 if($_GET['showwriter']){
 
 	$data = explode('_',$_GET['showwriter']);	

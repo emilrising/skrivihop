@@ -28,9 +28,9 @@ if(!$shead)
 					header('Location: ' . $openid->authUrl());
 				}
 			} elseif($openid->mode == 'cancel') {
-				$errorMessage = '<p>Inloggning avbruten</p>';
+				$errorMessage = 'Inloggning avbruten';
 			} elseif(!$openid->validate()) {
-				$errorMessage = '<p>Felaktiga inloggningsuppgifter</p>';
+				$errorMessage = 'Felaktiga inloggningsuppgifter';
 			} else {
 				// Successful authentication
 				session_regenerate_id();
@@ -64,13 +64,6 @@ if(!$shead)
 
 	// include standards
 	include "functions/logedin.php";
-// include "functions/latestpost.php";
-
-/*
-	if($_SESSION[loggedin]!=md5('N0H0tD0gBuns')){
-		//session_destroy();
-	}
-*/
 
 }
 // set heads true so it will not repeate itself

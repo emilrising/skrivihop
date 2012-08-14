@@ -123,7 +123,7 @@ else
 			<input type="submit" value="Fortsätt">
 		</p>
 	</form>
-<?  if ($errorMessage) { echo "<p><i>$errorMessage</i></p>"; } ?>
+	<div class="error"><?= $errorMessage ?></div>
 	<p>
 		<i>OpenID <?= $_SESSION['openid_identity'] ?></i>
 	</p>

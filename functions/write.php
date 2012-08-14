@@ -1,7 +1,13 @@
 <?php
 
-function do_write($latestpost=FALSE){
-	if(logged_in()){
+require_once('classes/action.php');
+
+function do_write($latestpost=FALSE)
+{
+	global $currentUser;
+	
+	if($currentUser)
+	{
 	?>
 		<div class="postfooter">
 
@@ -51,7 +57,7 @@ function do_write($latestpost=FALSE){
 
 					<br>
 
-					<input type="submit" name="submit">
+					<input type="submit" name="submit" value="Skicka">
 
 				</form>
 
@@ -76,80 +82,9 @@ function do_write($latestpost=FALSE){
 	<?
 	}
 }
-function do_new_chronicle(){
-	if(logged_in()){
-	?>
-		<div class="postfooter">
 
-		<div class="dotlight heading">
-
-			+
-
-		</div>
-
-		<div class="menu more">
-
-			<div class="arrowup">
-
-				<!-- -->
-
-			</div>
-
-			 <a>Ny Krönika</a>
-
-			<br style="clear: both;">
-
-			<div class="box">
-
-				<div class="arrowup">
-
-					<!-- -->
-
-				</div>
-
-				<form class="write" method="post">
-
-
-
-					<input type="hidden" name="type" id="newchronicle" checked="checked" value="newchronicle">
-
-
-
-					<label for="name">Krönikans namn:</label>
-					<input type="text" name="name" placeholder="Krönikans namn"><br><br>
-					<label for="shortdesc">Kort beskrivning:</label><br>
-					<textarea name="shortdesc"></textarea><br>
-					<label for="longdesc">Lång beskrivning:</label><br>
-					<textarea name="longdesc"></textarea>
-
-					<br>
-
-					<input type="submit" name="submit">
-
-				</form>
-
-				<br style="clear: both;">
-
-			</div>
-
-			<br style="clear: both;">
-
-		</div>
-
-		<br style="clear: both;">
-
-	</div>
-
-	<br style="clear: both;">
-
-</div>
-	
-	
-	
-	<?
-	}
-}
-function do_new_chronicle_simple(){
+function do_new_chronicle_simple()
+{
 	if(logged_in()){
 	?>
 <img src="images/ajax-loader.gif" class="loader">
@@ -178,44 +113,17 @@ function do_new_chronicle_simple(){
 	<?
 	}
 }
-function do_new_char(){
-	if(logged_in()){
+
+function do_new_char_simple()
+{
+	global $currentUser;
+	
+	if($currentUser)
+	{
 	?>
-		<div class="postfooter">
-
-		<div class="dotlight heading">
-
-			+
-
-		</div>
-
-		<div class="menu more">
-
-			<div class="arrowup">
-
-				<!-- -->
-
-			</div>
-
-			 <a>Ny Karaktär</a>
-
-			<br style="clear: both;">
-
-			<div class="box">
-
-				<div class="arrowup">
-
-					<!-- -->
-
-				</div>
-
-				<form class="write" method="post">
-
-
+		<img src="images/ajax-loader.gif" class="loader">
 
 					<input type="hidden" name="type" id="newchar" checked="checked" value="newchar">
-
-
 
 					<label for="name">Karaktärens namn:</label>
 					<input type="text" name="name" placeholder="Karaktärens namn"><br><br>
@@ -225,56 +133,17 @@ function do_new_char(){
 					<br>
 
 					<input type="submit" name="submit">
-
-				</form>
-
-				<br style="clear: both;">
-
-			</div>
-
-			<br style="clear: both;">
-
-		</div>
-
-		<br style="clear: both;">
-
-	</div>
-
-	
-	
-	
-	<?
+<?
 	}
 }
-function do_new_char_simple(){
-	if(logged_in()){
-	?>
-<img src="images/ajax-loader.gif" class="loader">
 
-					<input type="hidden" name="type" id="newchar" checked="checked" value="newchar">
-
-
-
-					<label for="name">Karaktärens namn:</label>
-					<input type="text" name="name" placeholder="Karaktärens namn"><br><br>
-					<label for="longdesc">Beskrivning:</label><br>
-					<textarea name="longdesc"></textarea>
-
-					<br>
-
-					<input type="submit" name="submit">
-
+function edit_player()
+{
+	global $currentUser;
 	
-	<?
-	}
-}
-function edit_player($id){
-		if(logged_in()){
-			
-	$sql = "SELECT * FROM `users` WHERE id = '".$id."'";
-	$res = mysql_query($sql);
-	$usr = mysql_fetch_assoc($res);
-	?>
+	if ($currentUser)
+	{		
+?>
 		<div class="postfooter">
 
 		<div class="dotlight heading">
@@ -304,31 +173,19 @@ function edit_player($id){
 				</div>
 
 				<form class="write" method="post">
-
-
-
-					<input type="hidden" name="type" id="editplayer" checked="checked" value="editplayer">
-					<input type="hidden" name="player" id="editplayer" value="<?=$usr['id']?>">
-
-
-
 					<label for="name">Ditt Namn:</label>
-					<input type="text" name="name" value="<?=$usr['name']?>"><br><br>
+					<input type="text" name="name" value="<?= $currentUser->name ?>"><br><br>
 					<label for="avatar">Avatar:</label>
-					<input type="text" name="avatar" value="<?=$usr['avatar']?>"><br><br>
+					<input type="text" name="avatar" value="<?= $currentUser->avatar ?>"><br><br>
 					<label for="longdesc">Beskrivning:</label><br>
-					<textarea name="description"><?=br2nl($usr['description'])?></textarea>
+					<textarea name="description"><?= $currentUser->description ?></textarea>
 					<br>
-					<div id="edit-player">
-					<a href="#" onclick="$('#edit-player').load('functions/newpassword.php?newpasswordplease=true&username=<?=$_SESSION[username]?>');">få ett nytt lösenord</a>
-					</div>
-					<br>
-					<input type="submit" name="submit">
+					<input type="submit" name="submit" value="Ändra">
 
 				</form>
 
 				<br style="clear: both;">
-
+				<i><?= $errorMessage ?></i>
 			</div>
 
 			<br style="clear: both;">
@@ -342,12 +199,24 @@ function edit_player($id){
 <br style="clear: both;">
 <br style="clear: both;">	
 	
-	
 	<?
 	}
 }
-function do_new_stuff(){
-	if(logged_in()){
+
+function do_new_stuff()
+{
+	/* TODO Here we could simplify a lot by not actually using an AJAX call, instead generating the 
+	 *      required forms inline similarly to how the links are generated.
+	 *      Also, we might consider emitting the jQuery code to show/hide the forms when the links 
+	 *      are clicked in this function as well.
+	 */
+	
+	global $currentUser;
+	
+	if ($currentUser)
+	{
+		$create_action_link = function($type) { return Action::CreateActionLink($type); };
+		
 		?> 
 		<div class="postfooter">
 
@@ -364,9 +233,7 @@ function do_new_stuff(){
 				<!-- -->
 
 			</div>
-
-			 	<a  id="do_new_char">Ny Karaktär</a> - <a  id="do_new_chronicle" >Ny Krönika</a> 
-
+			<?= join(" - ", array_map($create_action_link, func_get_args())); ?>
 			<br style="clear: both;">
 
 			<div class="box" >
@@ -395,7 +262,9 @@ function do_new_stuff(){
 <?
 	}
 }
-function edit_chronicle($id){
+
+function edit_chronicle($id)
+{
 	if(logged_in()){
 		$sql = "SELECT * FROM `chronicles` WHERE id = '".$id."'";
 		$res = mysql_query($sql);
@@ -472,100 +341,27 @@ function edit_chronicle($id){
 	<?
 	}
 }
-function edit_char($id){
-	if(logged_in()){
-		$sql = "SELECT * FROM `characters` WHERE id = '".$id."'";
-		$res = mysql_query($sql);
-		$char = mysql_fetch_assoc($res);
-	?>
-		<div class="postfooter">
 
-		<div class="dotlight heading">
-
-			+
-
-		</div>
-
-		<div class="menu more">
-
-			<div class="arrowup">
-
-				<!-- -->
-
-			</div>
-
-			 <a>Ändra Karaktär</a>
-
-			<br style="clear: both;">
-
-			<div class="box">
-
-				<div class="arrowup">
-
-					<!-- -->
-
-				</div>
-
-				<form class="write" method="post">
-
-
-
-					<input type="hidden" name="type" id="editchar" checked="checked" value="editchar">
-
-
-					<input type="hidden" name="char" value="<?=$id?>">
-					<label for="name">Karaktärens namn:</label>
-					<input type="text" name="name" value="<?=$char['name']?>"><br><br>
-					<label for="longdesc">Beskrivning:</label><br>
-					<textarea name="longdesc"><?=br2nl($char['longdesc'])?></textarea>
-
-					<br>
-
-					<input type="submit" name="submit">
-
-				</form>
-
-				<br style="clear: both;">
-
-			</div>
-
-			<br style="clear: both;">
-
-		</div>
-
-		<br style="clear: both;">
-
-	</div>
-
+function edit_post($id)
+{
+	global $currentUser;
 	
-	
-	
-	<?
-	}
-}
-function edit_post($id){
-	if(logged_in()){
-
-		$sql = "SELECT * FROM `post` WHERE `id` = '".$id."'";
-		$res = mysql_query($sql);
-		$post = mysql_fetch_assoc($res);
+	if ($currentUser)
+	{
+		$post = Post::getInstance($id);
 	?>
 		<div class="postfooter" style="position: relative; top: -30px; clear: both;">
 
-		<div class="dotlight" id="heading<?=$post['id']?>">
-
+		<div class="dotlight" id="heading<?=$post->id?>">
 			+
-
 		</div>
 
-		<div class="menu" id="more<?=$post['id']?>" style="display: none; clear: both;">
+		<div class="menu" id="more<?=$post->id?>" style="display: none; clear: both;">
 			<div class="arrowup" >
-
 				<!-- -->
-
 			</div>
 			<?php
-			if($post['createdby'] == $_SESSION['userid']){
+			if($post->creator()->isCurrentUser()){
 			?>
 			 <a class="change_a_post<?=$id?>" id="change_a_post_<?=$id?>" name="<?=$id?>">Ändra inlägg</a> - 
 			<?php
@@ -577,16 +373,10 @@ function edit_post($id){
 			<div class="box">
 
 				<div class="arrowup" id="arrow_up_<?=$id?>">
-
 					<!-- -->
-
 				</div>
 
 				<form class="write" method="post" id="<?=$id?>">
-
-
-
-
 
 				</form>
 
@@ -599,19 +389,16 @@ function edit_post($id){
 		</div>
 	</div>
 <br style="clear: both;">
-
-
-
-		
 	
 	<?
 	}
 }
-function edit_post_simple($id){
-	if(logged_in()){
-		$sql = "SELECT * FROM `post` WHERE `id` = '".$id."'";
-		$res = mysql_query($sql);
-		$post = mysql_fetch_assoc($res);
+function edit_post_simple($id)
+{
+	global $currentUser;
+	if($currentUser)
+	{
+		$post = Post::getInstance($id);
 	?>
 <img src="images/ajax-loader.gif" class="loader">
 
@@ -620,55 +407,49 @@ function edit_post_simple($id){
 
 
 					<input type="hidden" name="post" value="<?=$id?>">
-					<textarea name="body"><?=br2nl($post['body'])?></textarea>
-
+					<textarea name="body"><?=br2nl($post->body)?></textarea>
 					<br>
-
 					<input type="submit" name="submit">
-
-	
 	<?
 	}
 }
-function comment_post_simple($id){
-	if(logged_in()){
-		$sql = "SELECT * FROM `post` WHERE `id` = '".$id."'";
-		$res = mysql_query($sql);
-		$post = mysql_fetch_assoc($res);
+
+function comment_post_simple($id)
+{
+	global $currentUser;
+	
+	if($currentUser)
+	{
+		$post = Post::getInstance($id);
 	?>
 <img src="images/ajax-loader.gif" class="loader">
 
-
-
-
-
-					<input type="hidden" name="chronicle" value="<?=$post['chronicleid']?>">
+					<input type="hidden" name="chronicle" value="<?=$post->chronicleid?>">
 					<input type="hidden" name="post" value="<?=$id?>">
 					<input type="radio" name="type" id="comment" value="comment" checked="checked">
 					<textarea name="body"></textarea>
 					<br>
 					<input type="submit" name="submit">
-
-	
 	<?
 	}
 }
-function block_post_simple($id){
-	if(logged_in()){
-		$sql = "SELECT * FROM `post` WHERE `id` = '".$id."'";
-		$res = mysql_query($sql);
-		$post = mysql_fetch_assoc($res);
+
+function block_post_simple($id)
+{
+	global $currentUser;
+	
+	if($currentUser)
+	{
+		$post = Post::getInstance($id);
 	?>
 <img src="images/ajax-loader.gif" class="loader">
 
-					<input type="hidden" name="chronicle" value="<?=$post['chronicleid']?>">
+					<input type="hidden" name="chronicle" value="<?=$post->chronicleid?>">
 					<input type="hidden" name="post" value="<?=$id?>">
 					<input type="radio" name="type" id="block" value="block" checked="checked">
 					<textarea name="body"></textarea>
 					<br>
 					<input type="submit" name="submit">
-
-	
 	<?
 	}
 }

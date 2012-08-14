@@ -22,7 +22,7 @@ require_once "classes/chronicle.php";
 		</p>
 		<div class="box info">
 			<div class="dotlight number">
-				<?=($chronicle->total_posts() + $chronicle->total_comments())?>
+				<?=($chronicle->countPosts() + $chronicle->countComments())?>
 			</div>
 			<div class="arrowup">
 				<!-- -->
@@ -30,7 +30,7 @@ require_once "classes/chronicle.php";
 
 	    Skapad av <?= $chronicle->creator()->url() ?>, <?= $chronicle->createddate ?><br>
 
-	    	    Det finns <?=($chronicle->total_posts() + $chronicle->total_comments())?> inlägg i den här krönikan, varav <?=$chronicle->total_comments()?> är kommentarer.<br>
+	    	    Det finns <?=($chronicle->countPosts() + $chronicle->countComments())?> inlägg i den här krönikan, varav <?=$chronicle->countComments()?> är kommentarer.<br>
 	    	    Senaste inlägg skrevs <?=$chronicle->last_post()->createddate?>
 
 	    	     <ul><h4>Kategorier</h4>

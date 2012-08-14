@@ -186,6 +186,11 @@ li {
 	left: 50%;
 }
 
+.error {
+	color: #f00;
+	font-style: italic;
+}
+
 /* header */
 #header {
 	width: 100%;

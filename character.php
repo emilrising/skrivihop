@@ -48,10 +48,62 @@ if ($character)
 </div>
 
 <?php
-if($char['createdby'] == $_SESSION['userid'])
-edit_char($_GET['id']);
+	if ($character->createdby == $currentUser->id)
+	{ ?>
+		<div class="postfooter">
 
-} 
+		<div class="dotlight heading">
+
+			+
+
+		</div>
+
+		<div class="menu more">
+
+			<div class="arrowup">
+
+				<!-- -->
+
+			</div>
+
+			 <a>Ändra Karaktär</a>
+
+			<br style="clear: both;">
+
+			<div class="box">
+
+				<div class="arrowup">
+
+					<!-- -->
+
+				</div>
+
+				<form class="write" method="post">
+					<input type="hidden" name="char" value="<?= $character->id ?>">
+					<label for="name">Karaktärens namn:</label>
+					<input type="text" name="name" value="<?= $character->name ?>"><br><br>
+					<label for="longdesc">Beskrivning:</label><br>
+					<textarea name="longdesc"><?= br2nl($character->longdesc) ?></textarea>
+
+					<br>
+
+					<input type="submit" name="submit">
+
+				</form>
+
+				<br style="clear: both;">
+
+			</div>
+
+			<br style="clear: both;">
+
+		</div>
+
+		<br style="clear: both;">
+
+	</div>
+<?	}
+}
 else 
 {
 		?>
@@ -64,6 +116,5 @@ else
 
 
 include "i/footer.php";
-
 include "i/foot.php";
 ?>

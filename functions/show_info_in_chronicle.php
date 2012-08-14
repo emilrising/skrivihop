@@ -1,27 +1,32 @@
 <?php
-include "shead.php";
+require_once "i/shead.php";
+require_once "classes/post.php";
 
-function show_writer($id){
-	if(logged_in()){
-		$sql = "SELECT `createdby`,`createddate`,`editeddate` FROM `post` WHERE id = '".$id."'";
-		$res = mysql_query($sql);
-		$rad = mysql_fetch_assoc($res);
+function show_writer($id)
+{
+	global $currentUser;
+	global $pdo;
+	
+	if ($currentUser)
+	{
+		$post = Post::getInstance($id);
+		
+		if ($post)
+		{
 		?>
 		<div class="box info">
 			<div class="arrowup">
 				<!-- -->
 			</div>
-			<img src="images/ajax-loader.gif" class="loader">
 			<?php
-			if($rad['createddate'] > $_SESSION['lastlogin'] OR $rad['editeddate'] > $_SESSION['lastlogin']){
+			if ($post->createddate > $currentUser->lastlogin || $post->editeddate > $currentUser->lastlogin)
+			{
 				echo "<img src='images/dotlight8.png' class='new_post'>";
 			}
 			?>
-			 Skrivet av <a href="player.php?id=<?=$rad['createdby']?>"><?=get_user_name($rad['createdby'])?></a>, <?=$rad['createddate']?> <?=($rad['editeddate'] != NULL ? ", ".$rad['editeddate'] : "")?><br>
+			 Skrivet av <?= $post->creator()->url() ?>, <?= $post->editeddate ?><br>
 		</div>
-
 <script>
-
 
   //toggle the componenet with class msg_body
   $("#heading<?=$id?>").click(function()
@@ -29,60 +34,58 @@ function show_writer($id){
     $(this).next("#more<?=$id?>").slideToggle(500);
   });
   <?php
-  if($rad['createdby'] == $_SESSION['userid']){
-	overpre($rad);
+	if($post->createdby == $currentUser->id)
+	{
+
   ?>
 
   $(".change_a_post<?=$id?>").click(function () {
  		$('#arrow_up_'+$(this).attr('name')+'').css('right','380px');
-		    $('#'+$(this).attr('name')+'').load('functions/do_new_things_ajax.php?do=editpost&postid='+$(this).attr('name'));
+		    $('#'+$(this).attr('name')+'').load('ajax.php?action=editpost&id='+$(this).attr('name'));
   });
   $(".comment_a_post<?=$id?>").click(function () {
 	  		$('#arrow_up_'+$(this).attr('name')+'').css('right','244px');
-		    $('#'+$(this).attr('name')+'').load('functions/do_new_things_ajax.php?do=commentpost&postid='+$(this).attr('name'));
+		    $('#'+$(this).attr('name')+'').load('ajax.php?action=commentpost&id='+$(this).attr('name'));
    });
   $(".block_a_post<?=$id?>").click(function () {
 	  		$('#arrow_up_'+$(this).attr('name')+'').css('right','117px');
-		    $('#'+$(this).attr('name')+'').load('functions/do_new_things_ajax.php?do=blockpost&postid='+$(this).attr('name'));
+		    $('#'+$(this).attr('name')+'').load('ajax.php?action=blockpost&id='+$(this).attr('name'));
   });
 
   <?php
-  }
-  else{
+		}
+	}
+	else
+	{
   	?>
 
   $(".comment_a_post<?=$id?>").click(function () {
 	  		$('#arrow_up_'+$(this).attr('name')+'').css('right','380px');
-		    $('#'+$(this).attr('name')+'').load('functions/do_new_things_ajax.php?do=commentpost&postid='+$(this).attr('name'));
+		    $('#'+$(this).attr('name')+'').load('ajax.php?action=commentpost&id='+$(this).attr('name'));
    });
   $(".block_a_post<?=$id?>").click(function () {
 	  		$('#arrow_up_'+$(this).attr('name')+'').css('right','272px');
-		    $('#'+$(this).attr('name')+'').load('functions/do_new_things_ajax.php?do=blockpost&postid='+$(this).attr('name'));
+		    $('#'+$(this).attr('name')+'').load('ajax.php?action=blockpost&id='+$(this).attr('name'));
   });
 
 	<?php
   }
   ?>
-   		
-
 </script>
-
-
-		<?
-
+<?
 			edit_post($id);
-		
-
 	}
 }
 
-function show_comments($id){
-	if(logged_in()){
-		$sql = "SELECT * FROM `comments` WHERE postid = '".$id."'";
-		$res = mysql_query($sql);
-		$num = mysql_num_rows($res);
-		$i = 0;
-		if($num > 0){
+function show_comments($id)
+{
+		$post = Post::getInstance($id);
+				
+		if ($post)
+		{
+			$num = $post->countComments();
+			if ($num > 0)
+			{
 		?>
 		<div class="box">
 		<div class="dotlight number">
@@ -92,25 +95,25 @@ function show_comments($id){
 			<!-- -->
 		</div>
 		<?php
-		while($rad = mysql_fetch_assoc($res)){
-			$i++;
+				foreach ( $post->enumerateComments() as $comment)
+				{
+					$i++;
 		?>
 			<div class="comment">
 				<div class="dotlight">
 					<?=$i?>
 				</div>
-				<img src="images/ajax-loader.gif" class="loader">
 				<p>
-					<span class="who"><a href="player.php?id=<?=$rad['createdby']?>"><?=get_user_name($rad['createdby'])?></a> - <?=$rad['createddate']?></span>
+					<span class="who"><?= $comment->creator()->url() ?> - <?= $comment->createddate ?></span>
 					<br />
-					<?=stripslashes($rad['body'])?>	
+					<?= $comment->body ?>
 				</p>
 			</div>
 		<?php
-		}
+				}
 		?>
 		</div>
-		<?
+<?php
 		}
 	}
 }

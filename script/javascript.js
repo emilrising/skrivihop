@@ -6,14 +6,11 @@ jQuery(document).ajaxStop(function(){
 	$(".loader").hide();
 });
 
-
-
 $(document).ready(function() {
   $(".more").hide();
   //toggle the componenet with class msg_body
   $(".heading").click(function()
   {
-
     $(this).next(".more").slideToggle(500);
   });
   
@@ -22,26 +19,29 @@ $(document).ready(function() {
      $("#showwriters").click(function () {
       $('.showwriter').each(function (i) {
 		  	if($(this).hasClass('expanded')){
-		  		$('#'+this.id+'').load('functions/info_in_chronicles_ajax.php?close=1');	
+		  		$('#'+this.id+'').load('ajax.php?action=hidewriter');	
 		  		$(this).removeClass('expanded');
 		  	}
 		  	else{
 		  		$(this).addClass('expanded');
-		  		$('#'+this.id+'').load('functions/info_in_chronicles_ajax.php?showwriter='+this.id);	
+		  		$('#'+this.id+'').load('ajax.php?action=showwriter&id='+this.id);	
 		  	}
       });
     });
+    
     //Show comments
     $("#showcomments").click(function () {
       $('.showcomment').each(function (j) {
-		  	if($(this).hasClass('expanded')){
-		  		$('#'+this.id+'').load('functions/info_in_chronicles_ajax.php?close=1');	
+		  	if($(this).hasClass('expanded'))
+		  	{
+		  		$('#'+this.id+'').load('ajax.php?action=hidecomments');	
 		  		$(this).removeClass('expanded');
 
 		  	}
-		  	else{
+		  	else
+		  	{
 		  		$(this).addClass('expanded');
-		  		$('#'+this.id+'').load('functions/info_in_chronicles_ajax.php?showcomments='+this.id);	
+		  		$('#'+this.id+'').load('ajax.php?action=fetchcomments&id='+this.id);	
 		  	}
       });
     });
@@ -65,29 +65,27 @@ $(document).ready(function() {
     $('#edit_writer').css('right','380px');
     });
     
+    // TODO Use jQuery offset() to place the arrow correctly
     $("#do_new_char").click(function () {
 	    $('#do_new_arrow').css('right','380px');
-	    $('#do_new_stuff').load('functions/do_new_things_ajax.php?do=character');
+	    $('#do_new_stuff').load('ajax.php?action=newcharacter');
     });
-    
+
+    // TODO Use jQuery offset() to place the arrow correctly    
     $("#do_new_chronicle").click(function () {
 	    $('#do_new_arrow').css('right','252px');
-	    $('#do_new_stuff').load('functions/do_new_things_ajax.php?do=chronicle');
+	    $('#do_new_stuff').load('ajax.php?action=newchronicle');
     });
     
    	$(".edit_a_post").click(function () {
 	    $('#do_new_arrow').css('right','252px');
-	    $('#do_new_stuff').load('functions/do_new_things_ajax.php?do=chronicle');
+	    $('#do_new_stuff').load('ajax.php?action=editpost');
     });
 	
 	$("#filter").click(function () {
 	    $('#filter_search').load('functions/filter_search_ajax.php?site='+$('#filter').attr('title'));
-
-	
     });
     
-	
-	
 	$('textarea').autoResize();
 	
 	$("#categories").autocomplete('functions/autocomplete.php', {

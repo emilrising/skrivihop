@@ -119,9 +119,7 @@ require_once "classes/chronicle.php";
 </div>
 <br>
 <?php
-
-do_new_chronicle();
-
+	do_new_stuff(Action::NewChronicle);
 ?>
 <br style="clear: both;">
 <?php

@@ -1,36 +1,41 @@
 <?php
 include "i/head.php";
 include "i/header.php";
-include "functions/show_info_in_chronicle.php";
 
 require_once "classes/chronicle.php";
 require_once "classes/post.php";
 
+// TODO: Idé: spara tillståndet med en vanlig cookie, och låt logiken vara helt på klient-sidan
+//       Alltså flytta markörerna 'showcomments' och 'showwriter' från sessionen och använd ren
+//       Javascript för att hantera och spara tillståndet.
 /*
  * Visa kommentarer om det en gång är lagrat i session
  */
-if($_SESSION['showcomments']){
+if($_SESSION['showcomments'])
+{
 	?>
 	<script type="text/javascript">
 		$(document).ready(function() {
 	      $('.showcomment').each(function (j) {
 	      	$(this).addClass('expanded');
-	        $('#'+this.id+'').load('functions/info_in_chronicles_ajax.php?showcomments='+this.id);
+	        $('#'+this.id+'').load('ajax.php?action=fetchcomments&id='+this.id);
 	      });
-		});		
+		});
 	</script>
 	<?
 }
+
 /*
  * Visa författare om det en gång är lagrat i session
  */
-if($_SESSION['showwriter']){
+if($_SESSION['showwriter'])
+{
 	?>
 	<script type="text/javascript">
 		$(document).ready(function() {
 	      $('.showwriter').each(function (j) {
 	      	$(this).addClass('expanded');
-			$('#'+this.id+'').load('functions/info_in_chronicles_ajax.php?showwriter='+this.id);
+			$('#'+this.id+'').load('ajax.php?action=showwriter&id='+this.id);
 	      });
 		});		
 	</script>
@@ -71,19 +76,17 @@ if ($chronicle)
   
 	    </p>
 		<div id="writer_<?=$post->id?>" class="showwriter">
-		<img src="images/ajax-loader.gif" class="loader">
 		</div>
 		<div id="comments_<?=$post->id?>" class="showcomment">
-		<img src="images/ajax-loader.gif" class="loader">
 		</div>
+		<img src="images/ajax-loader.gif" class="loader">
 		<?
 		$latestpost = $post->id;
 	}
-
 ?>
 
 <?php
-do_write($latestpost);
+	do_write($latestpost);
 
 } 
 else 
@@ -93,6 +96,5 @@ else
 }
 
 include "i/footer.php";
-
 include "i/foot.php";
 ?>

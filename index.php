@@ -25,14 +25,12 @@ if (!$currentUser)
     	<p><a onclick="document.forms['login'].openid_identifier.value='https://www.google.com/accounts/o8/id'">Google-konto</a></p>
     	<label for="openid_identifier">OpenID URL</label><input type="text" name="openid_identifier" />
     	<input type="submit" name="submit" value="Logga in">
-    	<p><i><?= $errorMessage ?></i></p>
+    	<div class="error"><?= $errorMessage ?></div>
 	</form>
 <?php
 }
 ?>
 	<h1>Skriv tillsammans!</h1>
-
-
 
 	<h2>Om Skrivihop</h2>
 
@@ -60,7 +58,7 @@ if (!$currentUser)
 		<p>"<i><?= $post->body ?></i>"</p>
 					
 		<p class="byuser">
-			Av <?= $post->user()->url() ?>,<br>
+			Av <?= $post->creator()->url() ?>,<br>
 			från krönikan <?= $post->chronicle()->url() ?></a>
 		</p>
 		<br style="clear:both;">	

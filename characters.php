@@ -114,7 +114,7 @@ require_once "classes/character.php";
 </div>
 <br>
 <?php
-do_new_char();
+	do_new_stuff(Action::NewCharacter);
 ?>
 <br style="clear: both;">
 <?php

@@ -17,7 +17,7 @@ class Chronicle
 		return "<a href=\"chronicle.php?id=$this->id\">$this->name</a>";
 	}
 	
-	public function total_posts()
+	public function countPosts()
 	{
 		global $pdo;
 		
@@ -26,7 +26,7 @@ class Chronicle
 		return $stmt->fetchColumn(0);
 	}
 	
-	public function total_comments() { 
+	public function countComments() { 
 		global $pdo;
 
 		$stmt = $pdo->prepare("SELECT COUNT(*) FROM `comments` WHERE `chronicleid` = :id");

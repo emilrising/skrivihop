@@ -1,12 +1,16 @@
 <?php
-function logged_in(){
-	if($_SESSION['logedin'] == md5('N0H0tD0gBuns'))
-		return TRUE;
+function logged_in()
+{
+	global $currentUser;
+	return $currentUser;
 }
+
 function do_logout(){
 	session_destroy();
 }
+
 function updates_since_last($returntype='all'){
+	/*
 	$sql = "SELECT `chronicleid` FROM `post` WHERE `createdby` = '".$_SESSION['userid']."' GROUP BY `chronicleid`";
 	$res = mysql_query($sql);
 
@@ -27,27 +31,35 @@ function updates_since_last($returntype='all'){
 		return $total[$returntype];
 	else	
 		return ($total['posts']+$total['comments']);
+	 */
+	 
+	 /* TODO Implement! */
+	 return 0;
 }
 
 function do_top_header(){
-	if(logged_in()){
+	global $currentUser;
+	
+	if ($currentUser)
+	{
 	?>
 				<div id="accountinfo">
 					<div class="dotlight">
 						<?=updates_since_last()?>
 					</div>
-					<a href="player.php?id=<?=$_SESSION['userid']?>">Mitt konto</a>&nbsp;&nbsp-&nbsp;&nbsp;<a href="index.php?logout=true">Logga ut</a>
+					<?= $currentUser->url(); ?>&nbsp;&nbsp;-&nbsp;&nbsp;<a href="index.php?logout=true">Logga ut</a>
 				</div>
-	
-	
-	
 	<?
 	}
 }
 
-function filter_chronicle(){
-	if(logged_in()){
-		?> 
+function filter_chronicle()
+{
+	global $currentUser;
+	
+	if ($currentUser)
+	{
+?> 
 	<div class="submenu">
 	
 	<div class="dotlight heading">
@@ -57,7 +69,7 @@ function filter_chronicle(){
 		<div class="arrowup">
 			<!-- -->
 		</div>
-		<a  id="showcomments">Visa kommentarer</a> - <a  id="showwriters" >Visa författatinformation</a> 
+		<a id="showcomments">Visa kommentarer</a> - <a id="showwriters" >Visa författarinformation</a> 
 	</div>
 	<br style="clear: both;">
 	</div>

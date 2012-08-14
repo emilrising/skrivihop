@@ -19,8 +19,20 @@ class User
 	
 	public function formatted_description()
 	{
-		$formatted_description = preg_replace("/(http:\/|(www\.))(([^\s<]{4,68})[^\s<]*)/","<a href='http://$2$3' target='_blank'>$1$2$4</a>",$this->description);
-	    $formatted_description = preg_replace("/(\s@)(([^\s<]{4,68})[^\s<]*)/","<a href='https://twitter.com/#!/$2' target='_blank'>$1$2$4</a>",$formatted_description);
+		$formatted_description = htmlentities($this->description, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+		$formatted_description = nl2br($formatted_description);
+		
+		// Replace web addresses with actual links
+		$formatted_description = preg_replace("/(http:\/\/[^\s<]+)/","<a href='$1' target='_blank'>$1</a>",$formatted_description);
+		$formatted_description = preg_replace("/(www\.[^\s<]+)/","<a href='http://$1' target='_blank'>$1</a>",$formatted_description);
+		$formatted_description = preg_replace("/(https:\/\/[^\s<]+)/","<a href='$1' target='_blank'>$1</a>",$formatted_description);
+		
+		// Replace strings of the format 'name@domain' with mailto links
+		$formatted_description = preg_replace("/([^\s>]+@[^\s<]+)/", "<a href='mailto:$1'>$1</a>", $formatted_description);
+		
+		// Replace strings of the format '@name' with Twitter links
+	    $formatted_description = preg_replace("/(\s@)([^\s<]+)/","<a href='https://twitter.com/#!/$2' target='_blank'>$1$2</a>",$formatted_description);		
+		
 	    return $formatted_description;
 	}
 	
@@ -53,6 +65,21 @@ class User
 		$stmt->execute(array(':id' => $this->id));
 		$stmt->setFetchMode(PDO::FETCH_INTO, new Chronicle);
 		return $stmt;
+	}
+	
+	public function update()
+	{
+		global $pdo;
+		
+		$stmt = $pdo->prepare("UPDATE users SET name = :name, description = :description, avatar = :avatar WHERE id = :id");
+		return $stmt->execute(array(':id' => $this->id, ':name' => $this->name, ':description' => $this->description, ':avatar' => $this->avatar));		
+	}
+	
+	public function isCurrentUser()
+	{
+		global $currentUser;
+		
+		return $currentUser && $currentUser->id == $this->id;
 	}
 	
 	public static function getInstance($id)
