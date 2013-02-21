@@ -51,17 +51,9 @@ if ($chronicle)
 <h2><?=$chronicle->name?></h2>
 <?=filter_chronicle()?>
 <br style="clear: both;">
-<?php
-	$orderby = "`createddate` ASC";
-	$limitby = "";
-	$sql = "SELECT * FROM `post` WHERE `chronicleid` = :id AND active != 'no' ORDER BY ".$orderby." ".$limitby." ";
-	
-	$stmt = $pdo->prepare($sql);
-	$stmt->execute(array(':id' => $_GET['id']));	
-	$stmt->setFetchMode(PDO::FETCH_INTO, new Post);
-	
+<?php	
 	$i=0;
-	foreach ($stmt as $post)
+	foreach ($chronicle->enumeratePosts() as $post)
 	{
 		$i++;
 		?>
@@ -81,12 +73,11 @@ if ($chronicle)
 		</div>
 		<img src="images/ajax-loader.gif" class="loader">
 		<?
-		$latestpost = $post->id;
 	}
 ?>
 
 <?php
-	do_write($latestpost);
+	do_write($chronicle->last_post()->id);
 
 } 
 else 

@@ -47,7 +47,7 @@ if ($user->isCurrentUser())
 					<input type="text" name="name" value="<?= $currentUser->name ?>"><br><br>
 					<label for="avatar">Avatar:</label>
 					<input type="text" name="avatar" value="<?= $currentUser->avatar ?>"><br><br>
-					<label for="longdesc">Beskrivning:</label><br>
+					<label for="description">Beskrivning:</label><br>
 					<textarea name="description"><?= $currentUser->description ?></textarea>
 					<br>
 					<input type="submit" name="submit" value="Ändra">

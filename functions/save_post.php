@@ -1,37 +1,41 @@
 <?php
 
+/* TODO: Port all mysql_query calls with $pdo->execute() */ 
+
 if($currentUser && $_POST)
 {
 	switch ($_POST['type'])
 	{
 		case 'write':
-			$sql = "INSERT INTO `post` 
-					( 
-					`id` , 
-					`chronicleid` , 
-					`body` , 
-					`createddate` , 
-					`editeddate` , 
-					`createdby` , 
-					`active` 
-					)
-					VALUES 
-					(
-					NULL , 
-					'".$_POST['chronicle']."', 
-					'".insert_ready($_POST['body'])."', 
-					'".date('Y-m-d H:i:s')."', 
-					NULL , 
-					'".$_SESSION['userid']."', 
-					'yes'
-					);
-			";
-			mysql_query($sql);
+			
+			$stmt = $pdo->prepare("INSERT INTO `post` 
+						(  
+							`chronicleid` , 
+							`body` , 
+							`createddate` , 
+							`editeddate` , 
+							`createdby` , 
+							`active` 
+						) VALUES (
+							:Id, 
+							:Body,
+							CURRENT_TIMESTAMP,
+							NULL,
+							:CreatedBy,
+							'yes')");
+									
+			if(!$stmt->execute(array(':Id' => $_POST['chronicle'], ':Body' => $_POST['body'], ':CreatedBy' => $currentUser->id)))
+			{
+				$error = $stmt->errorInfo();
+				throw new Exception($error[2], $error[0]); 
+			}
+			
 			break;
 
 		case 'comment':
-					$sql = "INSERT INTO `comments` 
-							(  
+
+			$stmt = $pdo->prepare("INSERT INTO `comments` 
+						(  
 							`chronicleid` , 
 							`body` , 
 							`createddate` , 
@@ -39,20 +43,23 @@ if($currentUser && $_POST)
 							`createdby` , 
 							`postid` , 
 							`active` 
-							)
-							VALUES (
-							'".$_POST['chronicle']."', 
-							'".insert_ready($_POST['body'])."', 
-							'".date('Y-m-d H:i:s')."' , 
-							NULL , 
-							'".$_SESSION['userid']."', 
-							'".$_POST['post']."', 
-							'yes'
-							);
-							";
-			mysql_query($sql);
-			break;
+						) VALUES (
+							:Id, 
+							:Body,
+							CURRENT_TIMESTAMP,
+							NULL,
+							:CreatedBy,
+							:PostId,
+							'yes')");
+									
+			if(!$stmt->execute(array(':Id' => $_POST['chronicle'], ':Body' => $_POST['body'], ':CreatedBy' => $currentUser->id, ':PostId' => $_POST['post'])))
+			{
+				$error = $stmt->errorInfo();
+				throw new Exception($error[2], $error[0]); 
+			}
 			
+			break;
+
 		case 'block':
 			
 					$sql = "INSERT INTO `comments` 

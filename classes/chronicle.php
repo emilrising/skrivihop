@@ -45,6 +45,17 @@ class Chronicle
 		return $stmt;
 	}
 	
+	public function enumeratePosts()
+	{
+		global $pdo;
+		
+		$stmt = $pdo->prepare("SELECT * FROM `post` WHERE `chronicleid` = :id AND active != 'no' ORDER BY `createddate` ASC");
+		$stmt->execute(array(':id' => $_GET['id']));	
+		$stmt->setFetchMode(PDO::FETCH_INTO, new Post);
+		
+		return $stmt;
+	}
+	
 	public function creator()
 	{
 		return User::getInstance($this->createdby);	
