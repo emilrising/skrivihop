@@ -13,6 +13,8 @@ include "functions/save_post.php";
 		<script type="text/javascript" src="script/autoresize.jquery.min.js"></script>
 		<script type="text/javascript" src="script/jquery.autocomplete.min.js"></script>
 		<script type="text/javascript" src="script/javascript.js"></script>
+		<script type="text/javascript" src="script/jquery.openid.js"></script>
+
 
 
 		

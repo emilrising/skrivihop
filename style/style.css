@@ -10,8 +10,7 @@ body {
 	padding: 0;
 	font-family: Georgia;
 	height: 100%;
-	font-size:100%;
-	
+	font-size: 100%;
 }
 
 .container {
@@ -49,61 +48,59 @@ a:visited {
 }
 
 .arrowup {
-	height:0px;
+	height: 0px;
 	width: 0px;
-	border: 0px solid transparent;
+	border: 0px solid rgba(0,0,0,0);
 	border-width: 0px 14px 16px 14px;
 	position: absolute;
 	margin-top: -25px;
-
 }
 
 .arrowdown {
-	height:0px;
+	height: 0px;
 	width: 0px;
-	border: 0px solid transparent;
+	border: 0px solid rgba(0,0,0,0);
 	border-width: 16px 14px 0px 14px;
 	position: absolute;
 	margin-top: -25px;
 }
 
 h1 {
-	font-size:2em; /* 32px */
-	margin-bottom:0.75em; /* 24px */
-	line-height:1.5; /* 48px */
+	font-size: 2em; /* 32px */
+	margin-bottom: 0.75em; /* 24px */
+	line-height: 1.5; /* 48px */
 }
 
 h2 {
-	font-size:1.5em; /* 24px */
-	margin-bottom:1em; /* 24px */
-	line-height:1; /* 24px */
+	font-size: 1.5em; /* 24px */
+	margin-bottom: 1em; /* 24px */
+	line-height: 1; /* 24px */
 }
 
 h3 {
-	font-size:1.25em; /* 20px */
-	margin-bottom:1.2em; /* 24px */
-	line-height:1.2; /* 24px */
+	font-size: 1.25em; /* 20px */
+	margin-bottom: 1.2em; /* 24px */
+	line-height: 1.2; /* 24px */
 }
 
 h4 {
-	font-size:1.125em; /* 18px */
-	margin-bottom:1.333em; /* 24px */
-	line-height:1.333; /* 24px */
+	font-size: 1.125em; /* 18px */
+	margin-bottom: 1.333em; /* 24px */
+	line-height: 1.333; /* 24px */
 }
 
 h5 {
-	font-weight:bold;
+	font-weight: bold;
 }
 
-h5,
-h6 {
-	font-size:1em; /* 16px */
-	margin-bottom:1.5em; /* 24px */
-	line-height:1.5; /* 24px */
+h5, h6 {
+	font-size: 1em; /* 16px */
+	margin-bottom: 1.5em; /* 24px */
+	line-height: 1.5; /* 24px */
 }
 
 p {
-	margin-bottom:1.5em;
+	margin-bottom: 1.5em;
 	line-height: 145%;
 	word-wrap: break-word;
 }
@@ -139,9 +136,9 @@ input[type="submit"] {
 	-moz-box-shadow: -4px 4px 0px #3d4746;
 	-webkit-box-shadow: -4px 4px 0px #3d4746;
 	box-shadow: -4px 4px 0px #3d4746;
-	float: right;	
+	float: right;
 	background-color: #687a79;
-	color:#fff;
+	color: #fff;
 	padding: 4px;
 	border: none;
 }
@@ -172,8 +169,8 @@ ol, ul {
 	width: 593px;
 	margin: 1.5em auto;
 	margin-left: 170px;
-	list-style-type:square;
-	list-style-image:url(../images/dotlight12.png);
+	list-style-type: square;
+	list-style-image: url(../images/dotlight12.png);
 }
 
 li {
@@ -222,7 +219,7 @@ li {
 #header #topmenu {
 	width: 960px;
 	margin: 0 auto;
-	position:relative;
+	position: relative;
 	top: -12px;
 }
 
@@ -248,7 +245,7 @@ li {
 #content p {
 	width: 593px;
 	margin: 0 auto;
-	margin-bottom:1.5em;
+	margin-bottom: 1.5em;
 	line-height: 145%;
 }
 
@@ -263,7 +260,7 @@ li {
 
 #content p a, #content h1 a, #content h2 a, #content h3 a, #content h4 a, #content h5 a {
 	font-style: normal;
-	color: #687a79;	
+	color: #687a79;
 }
 #content h1 a, #content h2 a, #content h3 a, #content h4 a, #content h5 a {
 	width: 593px;
@@ -287,7 +284,7 @@ li {
 	margin: 0 auto;
 	top: 26px;
 	margin-bottom: 3.2em;
-	clear:both;
+	clear: both;
 	display: block;
 }
 
@@ -312,7 +309,6 @@ li {
 #content .login label {
 	padding: 4px;
 	color: #fff;
-	width: 160px;
 	display: inline-block;
 }
 
@@ -351,7 +347,77 @@ li {
 
 #content .login .arrowup {
 	border-bottom-color: #a9c6c5;
-	right:40px;
+	right: 40px;
+}
+form.login ul {
+	text-align: center;
+	list-style-type: none;
+	display: inline;
+	list-style-image: none;
+}
+form.login ul li {
+	float: left;
+	padding: 4px;
+	list-style-type: none;
+}
+form.login ul li span {
+	padding: 0 1em 0 3px
+}
+form.login fieldset {
+	clear: both;
+	padding: 1em 0;
+	border: none;
+}
+form.login div+ fieldset {
+	display: none
+}
+form.login label {
+	display: block;
+	font-weight: bold;
+	font-size: larger;
+	margin-bottom: .5em
+}
+input[name=openid_username] {
+	width: 8em
+}
+input[name=openid_identifier] {
+	width: 18em
+}
+form.login ul li.highlight {
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	background-color: #E2E2DF
+}
+form.login fieldset div {
+	font-family: arial;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	background: rgba(0,0,0,0) url(images/fadegrey.png);
+	padding: 10px;
+	display: inline-block
+}
+form.login input[type='submit'] {
+	margin-left: 1em;
+}
+
+.login_logo {
+	color: #E2E2DF;
+	padding: 6px 0px 8px 28px;
+	background: url(images/openidico.png) no-repeat
+}
+
+#openid_login {
+	float: left;
+	font-size: larger;
+	width: 30%;
+	margin: 2em 1em;
+	text-align: center
+}
+#openid_login div {
+	margin-top: 0.5em
+}
+#openid_login div+ span {
+	font-size: smaller
 }
 
 #newpassword .box .arrowup {
@@ -384,11 +450,10 @@ li {
 #content .box .comment .dotlight {
 	position: absolute;
 	margin-top: -4px;
-
 }
 
 #content .postfooter .box {
-		left: -136px;
+	left: -136px;
 }
 
 #content .postfooter {
@@ -410,7 +475,7 @@ li {
 }
 
 #content .menu .box {
-	background-color:#fff;
+	background-color: #fff;
 	left: -140px;
 	-moz-box-shadow: -4px 4px 0px #e2e2df;
 	-webkit-box-shadow: -4px 4px 0px #e2e2df;
@@ -429,7 +494,7 @@ li {
 	-moz-box-shadow: -4px 4px 0px #3D4746;
 	-webkit-box-shadow: -4px 4px 0px #3D4746;
 	box-shadow: -4px 4px 0px #3D4746;
-	float:right;
+	float: right;
 	margin: 20px;
 	margin-right: 0px;
 }
@@ -461,7 +526,7 @@ li {
 
 .write input[type="text"] {
 	width: 70%;
-	float:right;
+	float: right;
 }
 
 .write textarea {
@@ -496,7 +561,7 @@ li {
 	-webkit-box-shadow: -4px 4px 0px #50908d;
 	box-shadow: -4px 4px 0px #50908d;
 	position: relative;
-	top:-2px;
+	top: -2px;
 	color: #fff;
 	display: none;
 }
@@ -507,7 +572,7 @@ li {
 }
 
 .new_post {
-	float:left;
+	float: left;
 	position: relative;
 	top: 2px;
 	margin-right: 4px;
@@ -564,7 +629,7 @@ li {
 }
 
 #content .pagination .left {
-	float:left;
+	float: left;
 	padding: 4px;
 }
 
@@ -594,7 +659,7 @@ li {
 	border-bottom-color: #f5f5f5;
 }
 
-#content .box ul { 
+#content .box ul {
 	margin-left: -10px;
 }
 
@@ -619,9 +684,9 @@ li {
 	width: 98%;
 	margin: 2.5em 0;
 	margin-left: 0px;
-	list-style-type:none;
-	list-style-image:none;
-	background-color: #fff;	
+	list-style-type: none;
+	list-style-image: none;
+	background-color: #fff;
 	-moz-box-shadow: -4px 4px 0px #E2E2DF;
 	-webkit-box-shadow: -4px 4px 0px #E2E2DF;
 	box-shadow: -4px 4px 0px #E2E2DF;
@@ -644,7 +709,7 @@ li {
 #footer #footermenu {
 	width: 960px;
 	margin: 0 auto;
-	position:relative;
+	position: relative;
 	top: -12px;
 }
 
